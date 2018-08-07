@@ -356,7 +356,7 @@ func (c *Controller) updateRelease(key string) error {
 			rlsName,
 			chartRequested,
 			helm.UpdateValueOverrides([]byte(helmObj.Spec.Values)),
-			//helm.UpgradeForce(true), ?
+			helm.UpgradeForce(true),
 		)
 		if err != nil {
 			return err

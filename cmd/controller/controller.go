@@ -352,11 +352,14 @@ func (c *Controller) updateRelease(key string) error {
 		rel = res.GetRelease()
 	} else {
 		log.Printf("Updating release %s", rlsName)
+		updateOpts := []helm.UpdateOption{helm.UpdateValueOverrides([]byte(helmObj.Spec.Values))}
+		if f := os.Getenv("TILLER_UPGRADE_FORCE"); f != "" {
+			updateOpts = append(updateOpts, helm.UpgradeForce(true))
+		}
 		res, err := c.helmClient.UpdateReleaseFromChart(
 			rlsName,
 			chartRequested,
-			helm.UpdateValueOverrides([]byte(helmObj.Spec.Values)),
-			helm.UpgradeForce(true),
+			updateOpts...,
 		)
 		if err != nil {
 			return err

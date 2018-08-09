@@ -354,6 +354,7 @@ func (c *Controller) updateRelease(key string) error {
 		log.Printf("Updating release %s", rlsName)
 		updateOpts := []helm.UpdateOption{helm.UpdateValueOverrides([]byte(helmObj.Spec.Values))}
 		if f := os.Getenv("TILLER_UPGRADE_FORCE"); f != "" {
+			log.Printf("Applying update using FORCE since environment variable was set")
 			updateOpts = append(updateOpts, helm.UpgradeForce(true))
 		}
 		res, err := c.helmClient.UpdateReleaseFromChart(
